@@ -1,0 +1,59 @@
+<div class="card">
+    <div class="card-header bg-dark">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        <div class="clearfix"></div>
+    </div>
+    <div class="card-body fluid-5">
+            <% @order.order_items.includes(:product).each do |item| %>
+                <div class="row container-fluid">
+                
+                    <img class="img-responsive" src="http://placehold.it/120x80" alt="Preview">
+                        
+                    <div class="col-xs-4 col-md-6">
+                        <h4 class="product-name"><strong><%= item.product.name %></strong></h4>
+                    </div>
+                    <div class="col-xs-6 col-md-4 row d-flex justify-content-end">
+                        <div class="col-xs-6 col-md-6 text-right" style="padding-top: 5px">
+                            <div class="row">
+                                <h6><strong><%= item.price%> 
+                                <span class="text-muted">X</span>
+                                <%= item.quantity %></strong></h6>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            <hr>
+        <% end %>
+        
+    </div> 
+</div>
+
+ 
+</div>
+<div class="card-footer">
+    <% if @cart.payment == nil %>
+        <p>Select your payment Method</p>
+        <%= form_with(model: @cart, local: true) do |form| %>
+            
+            <%= form.radio_button :payment, 'Stripe', :checked => true %> 
+            <%= label :stripe, 'Stripe'%>
+
+            <%= form.radio_button :payment, 'Paypal', :checked => true %> 
+            <%= label :paypal, 'Paypal' %>
+
+            <div class="actions">
+            <%= form.submit %>
+        <% end %>
+    <% else %>
+        <h5> Proceed to pay </h5>
+    <% end %>
+</div>
+    
+    <%= link_to 'pay', pay_with_cart_path(@cart), method: :put, class: 'btn btn-success pull-right' %>
+    <div class="pull-right" style="margin: 5px">
+        Total: $<b><%= @order.total %></b>
+    </div>
+    </div>
+</div>
